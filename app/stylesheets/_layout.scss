@@ -27,6 +27,17 @@ button:focus {
   outline: none;
 }
 
+blockquote {
+  border: 2px solid $iq-light-grey;
+  border-radius: 5px;
+  padding: 1rem;
+  background-color: $iq-light-grey;
+  color: black;
+  p {
+    font-size: 1rem !important;
+  }
+}
+
 .default-label {
   @include small-label($secondary-color);
 }
