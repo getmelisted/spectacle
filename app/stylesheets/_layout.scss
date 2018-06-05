@@ -6,7 +6,7 @@
 // Generic styles
 
 h1, h2, h3, h4, h5, h6 {
-  font-family: Montserrat, "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
+  font-family: $iq-title-font;
   font-weight: bold;
   color: $iq-purple;
 }
@@ -62,7 +62,6 @@ blockquote {
 
 #logo {
   padding-right: 0.5rem;
-  padding-top: 1rem;
   padding-bottom: 0.25rem;
   margin-bottom: 3rem;
 
@@ -203,6 +202,11 @@ article {
     margin-bottom: 0;
   }
 
+  a {
+    font-size: $text-regular;
+    color: $iq-teal;
+  }
+
   .tag-description {
     // margin-bottom: 0 !important;
   }
@@ -263,6 +267,13 @@ article {
     background-image: -moz-linear-gradient(top, rgba(255,255,255,0.4), rgba(255,255,255,0));
     background-image: -webkit-linear-gradient(top, rgba(255,255,255,0.4), rgba(255,255,255,0));
     background-image: linear-gradient(to bottom, rgba(255,255,255,0.4), rgba(255,255,255,0));
+  }
+
+  h2:not(.panel-title):not(.operation-title) {
+    color: $iq-purple;
+    margin: 0 0 .75rem;
+    padding: 0;
+    border: none;
   }
 
   h3 {
@@ -386,6 +397,23 @@ article {
     @extend .doc-content;
     @extend .columns;
 
+    code {
+      font-family: "Inconsolata", Consolas,"Liberation Mono",Courier,monospace; 
+    }
+
+    p > code {
+      background: $iq-light-grey;
+    }
+
+    pre > code {
+      background: $iq-dark
+    }
+
+    // span {
+    //   color: $iq-grey;
+    //   font-size: $text-regular;
+    // }
+
     // > h2 {
     //   width: 100%;
     //   margin-left: -$column-padding;
@@ -493,9 +521,14 @@ article {
       top: 0;
       text-align: right;
       right: 0;
-
+      
       .label {
+        font-family: $iq-title-font;
+        font-size: $text-small;
         cursor: pointer;
+        background: $iq-orange;
+        color: white;
+        
         &:hover {
           color: $light-gray;
         }
@@ -508,9 +541,16 @@ article {
         right: 50%;
       }
     }
-    .operation-path {
+    .operation-path, .operation-method {
       word-break: break-all;
+      color: $iq-grey;
+      font-size: $text-regular;
     }
+
+    // .operation-method {
+    //   color: $iq-grey;
+    //   font-size: $text-regular;
+    // }
   }
 
   //

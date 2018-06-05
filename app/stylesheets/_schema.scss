@@ -156,22 +156,29 @@ table.table {
 
 .json-schema-properties {
   @include named-section($msg-json-section-properties);
-
+  
   dl {
     margin: 0;
   }
-  dt {
-    margin-bottom: .25rem;
+  dt:not(.json-inner-schema) {
+    margin: 1rem 0;
+    padding-top: 1rem;
+    border-top: 1px solid $iq-light-grey;
 
     &.has-description {
       margin-bottom: 0;
     }
   }
-  dd {
+  dd:not(.json-inner-schema) {
+    padding-top: 1rem;
     color: $dark-gray;
   }
   dd:not(:last-child) {
     padding-bottom: 0.5rem;
+  }
+  .json-property-required {
+    display: flex;
+    padding-top: .2rem;
   }
 }
 
@@ -219,13 +226,40 @@ table.table {
 }
 
 .json-inner-schema {
-  .json-schema-properties,
+  .json-schema-properties {
+    padding-left: 1em;
+    margin-top: 0.5em;
+    padding-bottom: 0.5em;
+    dt {
+      border: none !important;
+      margin-top: 0;
+    }
+    dd {
+      margin-top: 0;
+      padding-top: .1rem;
+    }
+    &:before {
+      margin-bottom: 0;
+    }
+  };
+
   .json-schema-array-items,
   .json-schema-description,
   .json-schema-example {
     padding-left: 1em;
     margin-top: 0.5em;
     padding-bottom: 0.5em;
+  };
+  // border: 2px solid $iq-light-grey;
+  // border-radius: 4px;
+  // margin-bottom: 2rem;
+  
+  span, p, a {
+    font-size: $text-small !important;
+  }
+
+  .json-schema-properties:before {
+    font-size: $text-small;
   }
 }
 
@@ -234,7 +268,7 @@ table.table {
 }
 
 .json-property-required {
-  @include named-label($msg-json-required)
+  @include named-label($msg-json-required);
 }
 
 .json-property-read-only {
@@ -242,8 +276,11 @@ table.table {
 }
 
 
-.json-property-type {
-  // font-style: italic;
+.json-property-type,
+.json-property-range,
+.json-property-range::before,
+.json-property-enum {
+  font-style: italic;
   // font-weight: 100;
 }
 

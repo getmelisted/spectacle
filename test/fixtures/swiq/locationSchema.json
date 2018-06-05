@@ -1,0 +1,398 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "title": "Location",
+  "type": "object",
+  "required": [
+    "client",
+    "storeCode",
+    "branch",
+    "name",
+    "businessContact",
+    "address",
+    "locality",
+    "region",
+    "postcode",
+    "country",
+    "phone",
+    "categories",
+    "websiteToPublish"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "client": {
+      "title": "Client",
+      "description": "SweetIQ client name provided by account manager. It must be an exact match.",
+      "type": "string",
+      "minLength": 1
+    },
+    "branch": {
+      "title": "Branch",
+      "description": "Client’s location identifier. You may use this parameter as your record identifier. You may maintain this parameter as unique for your purposes but we do not require it to be so.",
+      "type": "string",
+      "minLength": 1
+    },
+    "name": {
+      "title": "Name",
+      "description":"Location’s name.",
+      "type": "string",
+      "minLength": 1
+    },
+    "businessContact": {
+      "title": "Owner/Store Manager",
+      "required": ["name", "email"],
+      "description": "An object containing the Owner or Store Manager contact info. This information can be the same across all locations.",
+      "type": "object",
+      "properties": {
+        "name": {
+          "title": "Name",
+          "description": "Name of owner or store manager.",
+          "type": "string",
+          "minLength": 1
+        },
+        "email": {
+          "title": "Email",
+          "description":"Contact’s email. Must be valid email address. Not published on directories. ex: bob@sweetiq.com",
+          "type": "string",
+          "format": "email"
+        }
+      }
+    },
+    "address": {
+      "title": "Address",
+      "description": "Civic number and street name. Do not include suite, unit, etc.",
+      "type": "string",
+      "minLength": 3
+    },
+    "address_extended": {
+      "title": "Extended Address",
+      "description": "Suite, unit, floor, etc.",
+      "type": ["string", "null"],
+      "minLength": 1
+    },
+    "locality": {
+      "title": "Locality",
+      "description": "City. Do not include multiple entries.",
+      "type": "string",
+      "minLength": 3
+    },
+    "region": {
+      "title": "Region",
+      "description": "State or province. 2 letter ISO code preferred. Do not include multiple entries.",
+      "type": "string",
+      "minLength": 2
+    },
+    "postcode": {
+      "title": "Postal Code",
+      "description": "Postal code or zip code. Do not include multiple entries.",
+      "type": "string",
+      "minLength": 5
+    },
+    "country": {
+      "title": "Country",
+      "description": "Country. 2 letter ISO code preferred. Do not include multiple entries.",
+      "type": "string",
+      "minLength": 2
+    },
+    "mallName": {
+      "title": "Mall Name",
+      "description": "Name of the mall/store within which the store is located.",
+      "type": ["string", "null"],
+      "minLength": 1
+    },
+    "phone": {
+      "title":"Phone",
+      "description":"Main local phone number. No toll-free numbers. Alphabetic characters are not accepted.",
+      "$ref": "#/definitions/phone"
+    },
+    "alternatePhoneNumbers": {
+      "title": "Alternate Phone Numbers",
+      "description": "Alternate local or toll-free number(s). Alphabetic characters are not accepted.",
+      "type": ["array", "null"],
+      "items": { "$ref": "#/definitions/phone" }
+    },
+    "fax": {
+      "title": "Fax",
+      "description": "Location’s fax number. Alphabetic characters are not accepted.",
+      "anyOf": [
+        { "$ref": "#/definitions/phone" },
+        { "type": "null" }
+      ]
+    },
+    "websiteToTrack": {
+      "title": "Website To Track",
+      "description": "The URL SweetIQ should track for statistical analysis. Must be a valid URL. Used in combination with keywords and geomodifiers.",
+      "type": "string",
+      "format": "uri"
+    },
+    "alternateWebsites": {
+      "title": "Alternate Websites",
+      "description": "Additional URLs. URLs must be valid.",
+      "type": ["array", "null"],
+      "items": { "type": "string", "format": "uri"}
+    },
+    "isServiceAreaBusiness": {
+      "title": "Is Service Are a Business",
+      "description": "Does this location operate within a specific region instead of out of a storefront? If yes, address will not be published on directories. Accepted format Y or N",
+      "type": ["boolean", "null"]
+    },
+    "serviceArea": {
+      "title": "Service Area",
+      "description": "Object describing the area location operates within.",
+      "type": ["object", "null"],
+      "anyOf":[
+        { "properties": {
+            "distance": { "type": "number" },
+            "unit": { "enum": ["km", "miles"] },
+            "regions": { "type": ["array", "null"], "items": {"type":"string", "minLength": 1}, "minItems": 1 }
+          }
+        },
+        { "properties": {
+            "distance": { "type": "null" },
+            "unit": { "enum": ["km", "miles", null] },
+            "regions": { "type": ["array", "null"], "items": {"type":"string", "minLength": 1}, "minItems": 1 }
+          }
+        }
+      ]
+    },
+    "hoursOfOperation": {
+      "title": "Hours Of Operation",
+      "description": "Object of days and hours. 24-hour format. Days without associated hours will be considered Closed. Use 00:00-23:59 to indicate open all day. Two shifts are supported per day.",
+      "type": ["object", "null"],
+      "properties": {
+        "Sun": { "$ref": "#/definitions/daySchedule" },
+        "Mon": { "$ref": "#/definitions/daySchedule" },
+        "Tue": { "$ref": "#/definitions/daySchedule" },
+        "Wed": { "$ref": "#/definitions/daySchedule" },
+        "Thu": { "$ref": "#/definitions/daySchedule" },
+        "Fri": { "$ref": "#/definitions/daySchedule" },
+        "Sat": { "$ref": "#/definitions/daySchedule" }
+      },
+      "minProperties": 1,
+      "maxProperties": 7,
+      "additionalProperties": false
+    },
+    "services": {
+      "title": "Services",
+      "description": "List of services offered by location.ex: delivery, online ordering, take-out, etc.",
+      "type": ["array", "null"],
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "categories": {
+      "title": "Categories",
+      "description": "Location categories. Most specific category should be first in list because some directories only accept a single category.",
+      "type": ["array", "null"],
+      "items": { "type": "string", "minLength": 1 },
+      "maxItems": 5
+    },
+    "storeCode": {
+      "title": "Store Code",
+      "description": "Unique location identifier.",
+      "type": "string",
+      "minLength":1
+    },
+    "tags": {
+      "title": "Tags",
+      "description": "Tags for filtering and grouping location data.",
+      "type": ["array", "null"],
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "emailToPublish": {
+      "title": "Email To Publish",
+      "description": "Email address to publish on directories. Must be valid email address. ex: listings@sweetiq.com",
+      "type": ["string", "null"],
+      "format": "email"
+    },
+    "websiteToPublish": {
+      "title": "Website To Publish",
+      "description": "Brand or location’s URL to be published on directories. Must be a valid URL.",
+      "type": "string",
+      "format": "uri"
+    },
+    "paymentMethods": {
+      "title": "Payment Methods",
+      "description": "Payment methods accepted by the location. ex: Visa, Cash, Paypal, etc.",
+      "type": ["array", "null"],
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "snippetDescription": {
+      "title": "Snippet Description",
+      "description": "Location tagline.",
+      "type": "string",
+      "maxLength": 150,
+      "minLength": 1
+    },
+    "shortDescription": {
+      "title": "Short Description",
+      "description": "Location description.",
+      "type": ["string", "null"],
+      "maxLength": 300,
+      "minLength": 1
+    },
+    "longDescription": {
+      "title": "Long Description",
+      "description": "Exhaustive location description.",
+      "type": ["string", "null"],
+      "minLength": 1
+    },
+    "keywords": {
+      "title": "Keywords",
+      "description": "Search phrases to rank locations on search engines. Used in combination with websiteToTrack and geomodifiers.",
+      "type": ["array", "null"],
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "geomodifiers": {
+      "title": "Geomodifiers",
+      "description": "Region, neighbourhood, nearby landmarks of location. Used in combination with websiteToTrack and keywords.",
+      "type": ["array", "null"],
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "closedDoorsDate": {
+      "title": "Closed Doors Date",
+      "description": "Date the location permanently closed for business. Adding a value to this field will set directory listings as permanently closed. Expected format: YYYY-MM-DD",
+      "$ref":"#/definitions/date"
+    },
+    "cancelDate": {
+      "title": "Cancel Date",
+      "description": "Date the location will be removed from SweetIQ platform. Directory listings will not be affected. Should be used if location should no longer be updated by SweetIQ, i.e. agency whose client cancels with them. If business is closing permanently, closedDoorsDate must be set 90 days before cancelDate. Expected format: YYYY-MM-DD",
+      "$ref":"#/definitions/date"
+    },
+    "imgLogo": {
+      "title": "Logo Image",
+      "description": "URL to logo image. Must be valid URL to a downloadable image. Links to folders are not valid. Logo dimensions: Must be square between 250px-500px",
+      "type": ["string", "null"],
+      "format": "uri"
+    },
+    "imgBanner": {
+      "title": "Banner Image",
+      "description": "URL to banner image. Must be valid URL to a downloadable image. Links to folders are not valid.Banner dimensions: 16:9 aspect ratio, min 480px x 270px, max 2120px x 1192px.",
+      "type": ["string", "null"],
+      "format": "uri"
+    },
+    "imgOthers": {
+      "title": "Other Images",
+      "description": "URL(s) to additional images. Must be valid URL to a downloadable image. Links to folders are not valid.",
+      "type": ["array", "null"],
+      "items": { "type": "string", "format": "uri" }
+    },
+    "otherInformation": {
+      "title": "Additional information",
+      "description": "Any other information about this location.",
+      "type": ["string", "null"],
+      "minLength": 1
+    },
+    "dirPackage": {
+      "title": "dirPackage",
+      "description": "Name of SweetIQ directory package selected for location.",
+      "type": ["string", "null"],
+      "minLength": 1
+    },
+    "socialMediaUrls": {
+      "title": "Social Media URLs",
+      "description": "URLs must be valid.",
+      "type": ["object", "null"],
+      "properties": {
+        "Facebook": {
+          "title": "Facebook",
+          "description": "URL for Facebook page.",
+          "type": ["string", "null"],
+          "format": "uri"
+        },
+        "Twitter": {
+          "title": "Twitter",
+          "description": "URL for Twitter page.",
+          "type": ["string", "null"],
+          "format": "uri"
+        },
+        "Foursquare": {
+          "title": "Foursquare",
+          "description": "URL for Foursquare page.",
+          "type": ["string", "null"],
+          "format": "uri"
+        },
+        "Yelp": {
+          "title": "Yelp",
+          "description": "URL for Yelp page.",
+          "type": ["string", "null"],
+          "format": "uri"
+        }
+      },
+      "additionalProperties": false
+    },
+    "distributionTo": {
+      "title":"Distribution To",
+      "description": "Primary email address to receive monthly report. Must be valid email address.",
+      "type": ["string", "null"],
+      "format": "email"
+    },
+    "distributionCC": {
+      "title": "Distribution CC",
+      "description": "Additional email addresses to receive monthly report. Each must be a valid email address. Comma separated string.",
+      "type": ["string", "null"],
+      "format": "email"
+    },
+    "latitude": {
+      "title": "Latitude",
+      "description": "Location latitude at store entrance point. Must be valid latitude between -90 and +90.",
+      "type": ["string", "null"]
+    },
+    "longitude": {
+      "title": "Longitude",
+      "description": "Location longitude at store entrance point. Must be valid longitude between -180 and +180.",
+      "type": ["string", "null"]
+    },
+    "isProfessional": {
+      "title": "isProfessional",
+      "description": "Is this location entry an individual or group of professionals instead of a company? Accepted format Y or N",
+      "type": ["boolean", "null"]
+    },
+    "brandName": {
+      "title": "brandName",
+      "description": "Brand's name.",
+      "type": "string",
+      "minLength": 1
+    },
+    "yearFounded": {
+      "title": "Year Founded",
+      "description": "Year the company was founded.",
+      "type": ["number", "null"],
+      "minimum": 0,
+      "maximum": 9999
+    },
+    "npi": {
+      "title": "NPI",
+      "description": "Unique 10-digit number issued to health care providers in the US.",
+      "type": ["number", "null"],
+      "minimum": 1000000000,
+      "maximum": 9999999999
+    },
+    "specialty": {
+      "title": "Specialty",
+      "description": "Type of Business (for example: Insurance, Medical).",
+      "type":  ["string", "null"],
+      "minLength": 1
+    }
+  },
+  "definitions": {
+    "phone": {
+      "type": "string",
+      "minLength": 7
+    },
+    "date": {
+      "type": "string",
+      "pattern":"^[0-9]{4}-(0[0-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$"
+    },
+    "daySchedule": {
+      "type": "array",
+      "maxItems": 2,
+      "items": {
+        "type":"array",
+        "minItems": 2,
+        "maxItems": 2,
+        "items": {
+          "type":"string",
+          "maxLength": 5
+        }
+      }
+    }
+  }
+}

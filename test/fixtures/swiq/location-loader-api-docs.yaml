@@ -1,0 +1,615 @@
+# TODO: Update intro.Test pushing for different sub-clients. Simplify client section to be more user-specific.
+---
+swagger: '2.0'
+info:
+  title: Location Loader API
+  version: '3.3'
+  $ref: ./topics/introduction.yaml
+host: locs.swiq3.com/api
+schemes:
+- https
+basePath: /api
+consumes:
+- application/json
+produces:
+- application/json
+x-spectacle-topics:
+  Authentication:
+    name: Authentication 
+    $ref: ./topics/authentication.yaml
+  Pushing Locations:
+    name: Pushing Locations
+    $ref: ./topics/pushing-locations.yaml
+  Staging vs. Production:
+    name: Pushing Locations
+    $ref: ./topics/staging-vs-production.yaml
+paths:
+  "/users/login":
+    post:
+      summary: Login
+      description: |
+        All API calls must be authenticated using a token generated using the *login* endpoint. The token is found under the `id` parameter in the response body. It must be included in the header of each call under the “Authorization”. Example: `"Authorization": "[your access token]"`
+      parameters:
+      - name: user
+        in: body
+        description: User login details.
+        required: true
+        schema:
+          $ref: "#/definitions/LoginObject"
+      tags:
+      - Users
+      responses:
+        '200':
+          description: Login Success
+          schema:
+            $ref: "#/definitions/AccessTokenObject"
+  "/pois/search":
+    post:
+      summary: Location Search
+      description: Get a set of locations and their listing status from the SweetIQ database based on supplied filters.
+      parameters:
+      - name: Authorization
+        in: header
+        description: Your access token.
+        required: true
+        type: string
+      - name: locationSearch
+        in: body
+        required: true
+        description: Search request parameters.
+        schema:
+          $ref: "#/definitions/LocationSearchObject"
+      tags:
+      - Location
+      responses:
+        '200':
+          description: Location Search Success
+          schema:
+            allOf:
+              - type: object
+                properties:
+                  listingStatus:
+                    $ref: "#/definitions/ListingStatus"
+              - $ref: "#/definitions/Location"
+  "/pois/v3/push":
+    post:
+      summary: Location Push
+      description: Create, Update, and Close locations.
+      parameters:
+      - name: Authorization
+        description: Client specific access token.
+        in: header
+        required: true
+        type: string
+      - name: LocationArray
+        in: body
+        required: true
+        description: List of location push information.
+        schema:
+          type: object
+          properties:
+            locations:
+              type: array
+              items:
+                $ref: "#/definitions/Location"
+      tags:
+      - Location
+      responses:
+        '200':
+          description: Location push Success
+          schema:
+            $ref: "#/definitions/LocationPushResponse"
+      #   '400':
+      #     description: Invalid or Missing field in request body
+      #     schema:
+      #       $ref: "#/definitions/LocationPushValidationError"
+definitions:
+#   User:
+#     type: object
+#     required:
+#     - email
+#     - password
+#     - clientName
+#     properties:
+#       email:
+#         type: string
+#         description: Unique email address
+#       clientName:
+#         type: string
+#         description: Client name
+#       password:
+#         type: string
+#         format: password
+#         description: Password for login
+  Something:
+    description: A lot of data
+    $ref: './locationSchema.json'
+  Location:
+    type: object
+    properties:
+      name:
+        type: string
+        description: The store name. Could be the same as the brandname
+      branch:
+        type: string
+        description: The unique branch id for the client
+      brandName:
+        type: string
+        description: The name of the brand. eg Rogers, A&W
+      storeCode:
+        type: string
+      businessContact:
+        type: object
+        description: Owner/Store Manager information
+        properties:
+          name:
+            type: string
+          email:
+            type: string
+      address:
+        type: string
+        description: Civic number and street name, type and direction
+      address_extended:
+        type: string
+        description: Suite/Unit/Floor
+      locality:
+        type: string
+        description: City
+      region:
+        type: string
+        description: State or Province
+      postCode:
+        type: string
+        description: Postal code/zip code
+      country:
+        type: string
+        description: e.g CA, US, UK
+      mallName:
+        type: string
+        description: Name of the mall.
+      phone:
+        type: string
+      alternatePhoneNumbers:
+        type: array
+        description: Local or 1-800 numbers
+        items:
+          type: string
+      fax:
+        type: string
+      emailToPublish:
+        type: string
+        description: The email address that will be published to the directories.
+          Leave empty if no email address will be sent.
+      websiteToTrack:
+        type: string
+      websiteToPublish:
+        type: string
+        description: This url usually includes a tracking code
+      alternateWebsites:
+        type: array
+        description: Allows for multiple URLs or dead links to be used when
+          validating search results
+        items:
+          type: string
+      socialMediaUrls:
+        type: object
+        description: key, value pair of socialMediaDomain, socialMediaUrl
+      categories:
+        type: array
+        description: Categories this location fits under (ex. oyster bar, pizza place)
+        items:
+          type: string
+      hoursOfOperation:
+        type: object
+        description: Hours of operation are denoted using day of the week as
+          the key and hour as the value. Hour should be in 24 hours format.
+        properties:
+          Sun:
+            type: array
+            description: Sunday hours
+            items:
+              type: array
+              items:
+                type: string
+          Mon:
+            type: array
+            description: Monday hours
+            items:
+              type: array
+              items:
+                type: string
+          Tue:
+            type: array
+            description: Tuesday hours
+            items:
+              type: array
+              items:
+                type: string
+          Wed:
+            type: array
+            description: Wednesday hours
+            items:
+              type: array
+              items:
+                type: string
+          Thu:
+            type: array
+            description: Thursday hours
+            items:
+              type: array
+              items:
+                type: string
+          Fri:
+            type: array
+            description: Friday hours
+            items:
+              type: array
+              items:
+                type: string
+          Sat:
+            type: array
+            description: Saturday hours
+            items:
+              type: array
+              items:
+                type: string
+      hoursAdditionalNotes:
+        type: string
+        description: Additional/Special hours
+      paymentMethods:
+        type: string
+        description: Payment methods accepted by the business, eg. visa, paypal
+      snippetDescription:
+        type: string
+        description: Location's description less than 160 characters
+      shortDescription:
+        type: string
+        description: Location's description in less than 500 characters.
+      longDescription:
+        type: string
+        description: Location's description in more than 150 characters
+      keywords:
+        type: array
+        description: Keywords to check against search engines
+        items:
+          type: string
+      geomodifiers:
+        type: string
+        description: Geomodifiers. Usually city names or postal codes to be
+          used in cartesian product with keywords
+      tags:
+        type: array
+        description: Tags aid with filtering and grouping
+        items:
+          type: string
+      imgLogo:
+        type: string
+        description: url link
+      imgBanner:
+        type: string
+        description: url link
+      imgOthers:
+        type: array
+        description: url links
+        items:
+          type: string
+      otherInformation:
+        type: string
+      isServiceAreaBusines:
+        type: string
+        description: Service Area Business? Y/N
+      serviceArea:
+        type: object
+        description: Service Area Business details
+        properties:
+          distance:
+            type: integer
+          unit:
+            type: string
+            description: eg. km/miles
+          regions:
+            type: array
+            description: comma separated listing of regions by name that the
+              location services
+            items:
+              type: string
+      latLong:
+        type: array
+        description: list of longitude and latitude, in that order
+        items:
+          type: string
+      suppresslistings:
+        type: string
+        description: Suppress listing? Y/N
+      closedDoorsDate:
+        type: string
+        description: The date the location stopped operatin
+      canceldate:
+        type: string
+      services:
+        type: array
+        description: Services this business offers (ex. walk-in
+        items:
+          type: string
+      distributionTo:
+        type: string
+      distributionCC:
+        type: string
+      latitude:
+        type: string
+      longitude:
+        type: string
+      isProfessional:
+        type: boolean
+      yearFounded:
+        type: integer
+      dirPackage:
+        type: string
+  # newUserResponse:
+  #   type: object
+  #   properties:
+  #     email:
+  #       type: string
+  #       description: Unique email address
+  #     clientName:
+  #       type: string
+  #       description: Client name
+#   LocationPushValidationError:
+#     type: object
+#     properties:
+#       error:
+#         type: object
+#         properties:
+#           status:
+#             type: number
+#           message:
+#             type: string
+#           errors:
+#             type: array
+#             items:
+#               $ref: '#/definitions/LocationValidationError'
+#   LocationValidationError:
+#     type: object
+#     properties:
+#       storeCode:
+#         type: string
+#       valid: 
+#         type: boolean
+#       errors:
+#         type: array
+#         items: string
+  LoginObject:
+    type: object
+    required:
+    - email
+    - password
+    properties:
+      email:
+        type: string
+        description: Email address from credentials provided by SweetIQ.
+      password:
+        type: string
+        description: Password from credentials provided by SweetIQ.
+  AccessTokenObject:
+    type: object
+    properties:
+      id:
+        type: string
+        description: Unique authentication token
+        format: Your access token
+      ttl:
+        type: integer
+        description: Length of time, in seconds, after which authentication token
+          expires
+      created:
+        type: string
+        description: Datetime of token creation.
+      userId:
+        type: string
+        description: Unique account identifier
+#   directoryListing:
+#     type: array
+#     description: List of supported directories
+#     items:
+#       type: object
+#       properties:
+#         name:
+#           type: string
+#         id:
+#           type: string
+#   createDirectoryRequest:
+#     type: object
+#     required:
+#     - name
+#     - push_method
+#     - data_type
+#     properties:
+#       name:
+#         type: string
+#         description: Directory name
+#       push_method:
+#         type: string
+#         description: method of data delivery
+#       data_type:
+#         type: string
+#         description: format of the data e.g(json,csv)
+#   createDirectoryResponse:
+#     type: object
+#     properties:
+#       name:
+#         type: string
+#         description: Directory name
+#       push_method:
+#         type: string
+#         description: method of data delivery
+#       data_type:
+#         type: string
+#         description: format of the data e.g(json,csv)
+#       id:
+#         type: string
+#   locationPushRequest:
+#     type: object
+#     required:
+#     - locations
+#     properties:
+#       locations:
+#         type: array
+#         description: location details to push
+#         items:
+#           $ref: '#/definitions/Location'
+  
+  LocationPushResponse:
+    type: object
+    properties:
+      client:
+        type: string
+        description: Directory name
+      count:
+        type: integer
+        description: Count of locations pushed
+      locations:
+        type: array
+        description: push results for each location
+        items:
+          type: object
+          properties:
+            action:
+              type: string
+              description: directory push type
+            status:
+              type: string
+              description: Status of push
+  LocationSearchObject:
+    type: object
+    required:
+    - search_fields
+    properties:
+      search_fields:
+        type: object
+        properties:
+          branches:
+            type: array
+            description: Collection of branch ids of desired locations.
+            items:
+              type: string
+          storeCode:
+            type: string
+            description: Unique location identifier.
+          name:
+            type: string
+            description: Location’s name.
+          phone:
+            type: string
+            description: Main local phone number.
+          locality:
+            type: string
+            description: City. Do not include multiple entries.
+          region:
+            type: string
+            description: State or province. 2 letter ISO code preferred. Do not include multiple entries.
+          country:
+            type: string
+            description: Country. 2 letter ISO code preferred. Do not include multiple entries.
+          postcode:
+            type: string
+            description: Postal code or zip code. Do not include multiple entries.
+  ListingStatus:
+    type: object
+    description: An object containing the status of a location’s listing status.
+    properties:
+      domain:
+        type: string
+        description: Directory name.
+      wordOrderStatus:
+        type: object
+        properties:
+          id:
+            type: string
+            description: Word order identification number.
+          name:
+            type: string
+            description: Internal status for department tracking purposes.
+          externalName: 
+            type: string
+            description: Public status of the work order.
+      isAggregator:
+        type: boolean
+        description: Whether the directory publishes listings URLs.
+      isListed:
+        type: boolean
+        description: Whether the listing has ever been published on the domain.
+      url:
+        type: string
+        description: URL of the published listing.        
+  LocationValidationError:
+    type: object
+    properties:
+      status:
+        type: integer
+        description: status code
+      message:
+        type: string
+        description: data validation error message
+      listing_status:
+        type: string
+        description: listing status of location, i.e FAILED
+      errors:
+        type: object
+        description: Key, Value pair of invalid fields and their data validation error
+          messages
+      warnings:
+        type: object
+        description: Key, Value pair of possibly invalid fields and their data validation
+          warnings
+#   requiredFieldError:
+#     type: object
+#     properties:
+#       name:
+#         type: string
+#         description: Error
+#       status:
+#         type: integer
+#         description: status code
+#       message:
+#         type: string
+#         description: Required Field error message
+#       cause:
+#         type: object
+#       isOperational:
+#         type: boolean
+#       stack:
+#         type: string
+#         description: full stackTrace
+#   Error:
+#     type: object
+#     properties:
+#       error:
+#         type: object
+#         properties:
+#           name:
+#             description: error
+#             type: string
+#           status:
+#             description: Status Code
+#             type: integer
+#           message:
+#             description: Error message
+#             type: string
+#   errorWithStackTrace:
+#     type: object
+#     properties:
+#       error:
+#         type: object
+#         properties:
+#           name:
+#             description: Error
+#             type: string
+#           status:
+#             description: Status Code
+#             type: integer
+#           message:
+#             description: Error message
+#             type: string
+#           stack:
+#             description: Error stackTrace
+#             type: string

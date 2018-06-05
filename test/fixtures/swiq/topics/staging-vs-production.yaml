@@ -1,0 +1,9 @@
+description: |
+  SweetIQ provides a staging envrionment in addition to production. These two environments are found at:
+  * staging: `https://locs-stag.swiq3.com/api`
+  * production: `https://locs.swiq3.com/api`
+
+  Important things to note about staging are:
+  * It is free at all times, but should only be used to test at certain times. The reason for this is that we sometimes run our own tests on this staging environment. Ask your Account Manager when you can test your pushes on staging.
+  * The staging and production environments require two different sets of credentials. Credentials are obtained from your Account Manager.
+  * Pushes to staging will not appear in your dashboard. After being sent, that data will only be viewable by your Account Manager and SweetIQ developers.

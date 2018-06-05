@@ -1,0 +1,40 @@
+description: |
+  As mentioned in the Introduction topic, Location Loader API is a synchronization API. You are meant to push all of your locations to us as one big array of objects, and our system will do the work of diffing those locations with what we currently have on our system, and propagating changes out to directories. If this solution does not work for you, sending *all* your locations is not mandatory. You can send a subset of your locations - even one at a time - and we will only diff and update what was sent in that location push.
+
+  Before sending your locations to us they must be formatted to conform to our schema, and a `storeCode` must be applied to each location.
+
+  ## Formatting & Schema: The Location Object
+  The [Location](/#definition-Location) object describes the schema required for your location data to be accepted. There are a few important points to remember when creating this object from your data:
+    1. We validate all locations sent to us. If one fails validation, the entire `POST` request will fail with a [LocationValidationError](/#definition-LocationValidationError).
+    2. We do not accept empty strings. If you have no value for a field that is not required, either submit `null` or omit the field from the location object*.
+  
+  > **Important**: Updating fields to `null` will erase any data that might have been manually entered by your Account Manager between your location pushes. Omitting the fields, however, will not.
+
+  ## The StoreCode Field
+  Every location that you submit through the API must have a `storeCode`. This is not to be confused with Google's storeCode field -- they are unrelated.
+
+  A `storeCode` is a unique identifier for a location in the context of Location Loader API. When you apply a `storeCode` to a location, any future modifications will always be applied to the location with the corresponding `storeCode`.
+
+  If you submit a location with a `storeCode` that does not exist, Location Loader will assume that you have submitted a new location.
+
+  The `storeCode` is a user-defined value, meaning that it is you who is reponsible for creating `storeCode`s and ensuring their uniqueness.
+
+  > **Pro-tip:** Don't create storeCodes from other information within a location unless you are sure that information will never change. We've seen our fair share of confusion with clients deciding to simply use the location branch as the storeCode, then changing the branch later. Duplicate locations will abound!
+
+  ## The Client Field
+  
+  The [Location](/#definition-Location) object has a field called `client`. This field is not pushed to directories. It is used by our system to know to which client account the location belongs. This is important because you can submit locations belonging to multiple sub-clients with the one set of credentials. See the [Authorization](/#topic-Authorization) topic for details.
+  
+  > **Very important:** this value is case sensitive and is not the same as the client name you see in your dashboard. Before sending locations, ask your Account Manager to provide you with the `client` values for Location Loader API.
+
+  ## Your First Push
+  SweetIQ requires all clients to successfully push their location data to our staging environment, before they are given credentials for production. 
+
+  A first successful push must:
+  * Pass the validator.
+  * Match the data that already exists on our systems (only applies to clients migrating to API from manual entry).
+  * Pass an audit by an Account Manager to ensure that all data is correct.
+
+
+
+

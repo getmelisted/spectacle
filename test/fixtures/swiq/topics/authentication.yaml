@@ -1,0 +1,33 @@
+description: |
+  Location Loader API uses basic authentication. You get an access token from the [login endpoint](/#tag-Users), and set that token as the `Authorization` header in your requests to the API, like so:
+  
+  `-H "Authorization: BQokikJOvBiI2HlWgH4olfQ2"`
+
+  Each set of credentials is valid for one environment, which is either staging or production. See the [Staging vs. Production](/#topic-staging-vs-production) topic for more details. Each set of credentials will be valid for one client/agency and all sub-clients (see below for details). Your Account Manager can provide you with these credentials.
+
+  ## Authentication and the `client`
+
+  Every set of credentials is tied to a specific client or sub-client on our system. Take, for instance, this set of credentials:
+  ```javascript
+  // Credentials for client called "Widgets, Inc."
+  {
+    email: 'john@widgets.com',
+    password: 'j2390asfj5jad',
+  }
+  ```
+  These credentials are tied to the `client` called "Widgets, Inc.", so whenever John pushes his locations to SweetIQ, every [Location](/#definition-Location) should have the `client` field populated with the value "Widgets, Inc.". Straight forward enough, right?
+
+  
+  But what if "Widgets, Inc." is actually a sub-client, and John has another sub-client called "Widgets Service Centers"? Does he need another set of credentials? No.
+
+  The client/sub-client hierarchy that exists in your enterprise dashboard is preserved in Location Loader API, meaning that a set of credentials created for one of John's sub-clients can be used for any one of his sub-clients.
+
+  ```javascript
+  // Credentials for sub-client called "Widgets, Inc." 
+  // can also be used for sub-client "Widgets Service Centers".
+  {
+    email: 'john@widgets.com',
+    password: 'j2390asfj5jad',
+  }
+  ```
+

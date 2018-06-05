@@ -9,11 +9,14 @@ $iq-black: #333132;
 $iq-grey: #636363;
 $iq-light-grey: #ebebeb;
 $iq-teal: #00B4C8;
-$iq-orange: #e54f29;
+$iq-orange: rgb(238, 86, 15);
 
+$text-small: 0.9rem;
 $text-regular: 1.1666rem;
 $text-large: 1.8333rem;
 $text-x-large: 2.16666rem;
+
+$iq-title-font: 'Montserrat', "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
 
 // Width of the off-canvas menu.
 $drawer-size: 250px !default;

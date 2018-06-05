@@ -1,0 +1,9 @@
+description: |
+  The SweetIQ Location API allows authenticated clients to programmatically manage locations and track listings progress associated with their SweetIQ Enterprise account.
+
+  This API is not a traditional CRUD API. It is meant to be used as a synchronization API. You `POST` your complete list of locations to us on a set interval, and our system detects differences and updates your directory listings accordingly.
+
+  You do not necessarily need to send your entire list of locations. We will only compare the locations you send to us. Create the API integration that works best with your backend.
+
+  We provide a staging environment for you to test and perfect your integration before we go into production. More on that in the next section.
+
