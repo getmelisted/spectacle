@@ -11,7 +11,7 @@ h1, h2, h3, h4, h5, h6 {
   color: $iq-purple;
 }
 
-p, a, div {
+p, a, div, li {
   font-family: "Open Sans", "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
 }
 
@@ -286,7 +286,7 @@ article {
     margin-top: 1rem;
   }
 
-  p {
+  p, li {
     font-size: $text-regular;
     color: $iq-grey;
   }
