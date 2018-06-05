@@ -5,6 +5,16 @@
 //
 // Generic styles
 
+h1, h2, h3, h4, h5, h6 {
+  font-family: Montserrat, "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
+  font-weight: bold;
+  color: $iq-purple;
+}
+
+p, a, div {
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
+}
+
 .no-padding {
   padding: 0 !important;
 }
@@ -62,7 +72,7 @@ button:focus {
   padding-right: 1rem;
   padding-bottom: 2rem;
   border-right: 1px solid #eee;
-  background-color: #f6f6f6;
+  background-color: $iq-light-grey;
   height: 100vh;
   overflow: auto;
   position: fixed;
@@ -74,23 +84,24 @@ button:focus {
   h5 {
     margin: 1.5rem 0 0.65rem;
     text-transform: uppercase;
-    color: scale-color($medium-gray, $lightness: -10%);
-    // color: $accent-color;
-    font-size: 0.9rem;
+    font-weight: 700;
+    color: scale-color($dark-gray, $lightness: -10%);
+    color: $iq-grey;
+    font-size: $text-regular;
   }
 
   a {
     display: block;
-    // font-size: 0.95rem;
+    font-size: $text-regular;
     margin: 0 0 0.25rem;
-    color: scale-color($black, $lightness: 15%);
+    color: $iq-dark;
     white-space: nowrap;
     overflow: hidden;
     -o-text-overflow: ellipsis;
     text-overflow: ellipsis;
 
     &.active {
-      color: $primary-color;
+      color: $iq-teal;
     }
   }
 
@@ -148,7 +159,7 @@ button:focus {
       // width: 50%;
       display: block;
       // background-color: #2E2F28;
-      background-color: $black;
+      background-color: $iq-dark;
       position: absolute;
       right: 0;
       top: 0;
@@ -194,11 +205,13 @@ article {
     padding-bottom: 0.75rem;
     padding-left: $column-padding;
     padding-right: $column-padding;
+    font-size: $text-large;
+    text-transform: uppercase;
     border-top: 1px solid #e8e8e8;
     border-bottom: 1px solid #e2e2e2;
     background-color: #f6f6f6;
-    // border-top: 1px solid #ddd;
-    // border-bottom: 1px solid #ccc;
+    border-top: 1px solid #ddd;
+    border-bottom: 1px solid #ccc;
     // background-image: url('data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgi…pZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9InVybCgjZ3JhZCkiIC8+PC9zdmc+IA==');
     // background-size: 100%;
     // background-image: -webkit-gradient(linear, 50% 0%, 50% 100%, color-stop(0%, #fff), color-stop(100%, #f9f9f9));
@@ -215,7 +228,9 @@ article {
     font-weight: bold;
     background: transparent;
     border: none;
-    color: scale-color($black, $lightness: 20%);
+    color: $iq-dark;
+    font-size: $text-x-large;
+    text-transform: none;
 
     span {
       display: none;
@@ -260,6 +275,11 @@ article {
     margin-top: 1rem;
   }
 
+  p {
+    font-size: $text-regular;
+    color: $iq-grey;
+  }
+
   //
   // Panels
 
@@ -281,7 +301,7 @@ article {
 
     padding-top: 0.75em;
     padding-bottom: 0.75em;
-    border-top: 1px solid #eee;
+    border-top: 1px solid #ddd;
 
     &:first-child, &.prop-group {
       border-top: 1px solid #ddd;
@@ -289,6 +309,7 @@ article {
 
     .prop-title {
       font-weight: bold;
+      font-size: $text-regular;
     }
 
     .prop-subtitle {
@@ -369,17 +390,20 @@ article {
 
     //color: $dark-gray;
     color: $white;
-    background-color: $dark-background-color;
+    background-color: $iq-dark;
+
+    h5:first-child {
+      font-weight: 400;      
+    }
 
     h5 {
       color: $white;
-      //color: $medium-gray;
-      font-size: 1rem;
-      opacity: 0.8;
+      font-size: $text-regular;
 
       span {
-        opacity: 0.5;
-        //color: $dark-gray;
+        font-family: "Open Sans", "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
+        font-weight: 400;
+        color: $white;
       }
     }
 
@@ -395,10 +419,13 @@ article {
       display: block;
       margin-bottom: 1.5rem;
       padding: 1.5rem;
-      font-family: Consolas,"Liberation Mono",Courier,monospace;
+      font-family: "Inconsolata", Consolas,"Liberation Mono",Courier,monospace;
       font-weight: inherit;
+      font-size: 12pt;
       color: inherit;
-      @include inset-panel();
+      border: none;
+      // @include inset-panel();
+      background-color: $iq-black;
       word-spacing: normal;
       white-space: pre-wrap;
       word-break: normal;
@@ -407,7 +434,7 @@ article {
 
     .swagger-response-headers {
 
-      @include inset-panel()
+      @include inset-panel();
       margin-bottom: 1.5rem;
 
       thead {
