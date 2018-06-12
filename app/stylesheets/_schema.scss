@@ -226,7 +226,8 @@ table.table {
 }
 
 .json-inner-schema {
-  .json-schema-properties {
+  .json-schema-properties,
+  .json-schema-array-items {
     padding-left: 1em;
     margin-top: 0.5em;
     padding-bottom: 0.5em;
@@ -258,7 +259,8 @@ table.table {
     font-size: $text-small !important;
   }
 
-  .json-schema-properties:before {
+  .json-schema-properties:before,
+  .json-schema-array-items:before {
     font-size: $text-small;
   }
 }
