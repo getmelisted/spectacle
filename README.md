@@ -138,6 +138,8 @@ Include environment variables before calling `npm test`.  For example, `OFFLINE`
 
 ## More Information
 
+Dev start command: `node bin/spectacle -D test/fixtures/swiq/location-loader-api-docs.yaml --logo-file test/fixtures/swiq/sweetiq_small.png`
+
 More info is available on the [Spectacle homepage](http://sourcey.com/spectacle).
 
 Please use the [GitHub issue tracker](https://github.com/sourcey/spectacle/issues) if you have any ideas or bugs to report.
