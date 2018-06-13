@@ -1,6 +1,6 @@
 # SwiqSpectacle
 
-SwiqSpectacle is OpenAPI 2.0 docs generator for SweetIQ projects that need branded documentation. See what they look like [here](http://locs-stag.swiq3.com/docs/).
+SwiqSpectacle is an OpenAPI 2.0 docs generator for SweetIQ projects that need branded documentation. See what they look like [here](http://locs-stag.swiq3.com/docs/).
 
 This repo is a fork of [Spectacle](https://sourcey.com/spectacle):
 
