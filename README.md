@@ -1,3 +1,7 @@
+<div style="display: flex; flex-direction: row; justify-content: center">
+  <img src="/test/fixtures/swiq/sweetiq_small.png" alt="swiq" style="width: 150px; height: 150px;"/>
+</div>
+
 # SwiqSpectacle
 
 SwiqSpectacle is OpenAPI 2.0 docs generator for SweetIQ projects that need branded documentation. See what they look like [here](http://locs-stag.swiq3.com/docs/).
